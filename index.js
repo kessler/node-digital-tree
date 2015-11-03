@@ -6,6 +6,13 @@ function Trie() {
 	this._data = {}
 }
 
+/**
+ *	put something in the tree.
+ *
+ *	@param {Array} key - each member in the array is a level in the tree
+ *	@param {variant} value - the value to store
+ *
+ */
 Trie.prototype.put = function (key, value) {
 	debug('put( {%s}, {%s} )', key, value)
 	var current = this._data
@@ -22,13 +29,20 @@ Trie.prototype.put = function (key, value) {
 	current.$ = value
 }
 
+/**
+ *	remove something from the tree
+ *
+ *	@param {Array} key
+ *
+ *	@return {Object} subtree that was removed
+ */
 Trie.prototype.remove = function (key) {
 	debug('remove( {%s} )', key)
 
 	var current = this._data
 	var parent
 
-	// find the path, if its not found return
+	// find the path, return nothing if its not there
 	for (var i = 0; i < key.length; i++) {
 		var node = key[i]
 
@@ -39,10 +53,23 @@ Trie.prototype.remove = function (key) {
 		current = current[node]
 	}
 
-	if (parent)
-		delete parent[key[key.length - 1]]
+	var last = key[key.length - 1]
+	var subtree = parent[last]
+	
+	if (parent) {
+		delete parent[last]
+	}
+
+	return subtree
 }
 
+/**
+ *	get something from the tree
+ *
+ *	@param {Array} key
+ *
+ *	@return {variant} the value that was placed under that key
+ */
 Trie.prototype.get = function(key) {
 	debug('get( {%s} )', key)
 	var current = this._data
@@ -60,10 +87,12 @@ Trie.prototype.get = function(key) {
 }
 
 /**
+ *	Search for something in the tree
  *
  *	@param key an array of tokens
  *	@param excludeKeys if true result will only include the leaves and not the whole path
  *
+ *	@return {Array} an array of arrays, each sub array contains the key and the value
  */
 Trie.prototype.searchByPrefix = function(key, excludeKeys) {
 	debug('search( {%s} )', key)

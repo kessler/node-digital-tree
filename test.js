@@ -8,14 +8,6 @@ describe('Trie', function () {
 
 	var trie
 
-	beforeEach(function () {		
-		trie = new Trie()
-		trie.put(['a', 'b', 'c'], 'data')
-		trie.put(['a', 'b', 'd'], 'data1')
-		trie.put(['a'], 'data2')
-		trie.put(['a', 'd'], 'data3')
-	})
-
 	it('put()', function () {
 		assert.strictEqual(typeof trie._data.a, 'object')
 		assert.strictEqual(typeof trie._data.a.b, 'object')
@@ -26,8 +18,11 @@ describe('Trie', function () {
 	})
 
 	it('remove()', function () {
-		trie.remove(['a', 'b', 'c'])
+		
+		var subtree = trie.remove(['a', 'b', 'c'])
+		
 		assert.strictEqual(trie._data.a.b.c, undefined)
+		assert.strictEqual(subtree.$, 'data')
 	})
 
 	it('get()', function () {
@@ -49,7 +44,6 @@ describe('Trie', function () {
 
 	it('can be searched', function () {
 		var results = trie.searchByPrefix(['a', 'b'])
-
 		assert.deepEqual(results[0], [['a', 'b', 'c'], 'data'])
 		assert.deepEqual(results[1], [['a', 'b', 'd'], 'data1'])
 	})
@@ -66,7 +60,7 @@ describe('Trie', function () {
 
 		assert.strictEqual(results.length, 0)
 	})
-
+	
 	describe('benchmark', function () {
 		var putBench
 		var searchBench
@@ -103,5 +97,12 @@ describe('Trie', function () {
 			}
 		})
 	})	
-	
+
+	beforeEach(function () {		
+		trie = new Trie()
+		trie.put(['a', 'b', 'c'], 'data')
+		trie.put(['a', 'b', 'd'], 'data1')
+		trie.put(['a'], 'data2')
+		trie.put(['a', 'd'], 'data3')
+	})	
 })
