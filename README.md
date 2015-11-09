@@ -18,7 +18,7 @@ npm install --save digital-tree
 ### put(key, value)
 Put something in the tree
 ```javascript
-    trie.puth(['a', 'path', 'to'], 'something')
+    trie.put(['a', 'path', 'to'], 'something')
 ```
 
 ### remove(key)
