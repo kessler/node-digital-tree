@@ -21,6 +21,6 @@
   },
   "homepage": "https://github.com/kessler/node-digital-tree",
   "dependencies": {
-    "debug": "^1.0.1"
+    "debug": "^4.1.1"
   }
 }
