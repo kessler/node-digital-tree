@@ -21,6 +21,12 @@
   },
   "homepage": "https://github.com/kessler/node-digital-tree",
   "dependencies": {
-    "debug": "^4.1.1"
+    "benchmark": "^2.1.4",
+    "debug": "^4.1.1",
+    "json-stringify-safe": "^5.0.1"
+  },
+  "devDependencies": {
+    "ava": "^2.1.0",
+    "benchmarkify": "^2.1.1"
   }
 }
