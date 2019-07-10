@@ -70,7 +70,7 @@ A trie is iterable. Iteration order is either [DFS](https://en.wikipedia.org/wik
 
 ### search(prefix)
 
-Search and return all the values in the tree that are nested until the provided `prefix`.
+Search and return all the values in the tree that are nested under the provided `prefix`.
 
 The results will be an Iterator over the matching values. The order of iteration is defined based on the default ordering of the trie (BFS/DFS)
 
