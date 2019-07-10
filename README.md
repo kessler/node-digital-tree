@@ -10,6 +10,8 @@ A trie data structure implementation.
 
     npm install --save digital-tree
 
+***version 2.0.0 is almost a complete rewrite and mostly not backwards compatible***
+
 ## API
 
 ### create() / Ctor
@@ -19,7 +21,6 @@ using `create()`` is the recommended way to construct new digital trees:
 ```javascript
     const Trie = require('digital-tree')
     const trie = Trie.create()
-    const anotherTrie = new Trie()
 ```
 
 ### put(key, value)
@@ -62,7 +63,9 @@ A trie is iterable. Iteration order is either [DFS](https://en.wikipedia.org/wik
     trie.put('abd', 2)
     trie.put('abe', 3)
 
-    for (let value of )
+    for (let [key, value] of trie) {
+
+    }
 ```
 
 ### search(prefix)
@@ -78,6 +81,7 @@ The results will be an Iterator over the matching values. The order of iteration
     trie.put('abe', 3)
 
     console.log(Array.from(trie.search('ab'))) // prints [ 3, 2, 1 ]
+    console.log(Array.from(trie.search('ab', { includeKeys: true }))) // prints [ [['a','b','e'], 3 ], [['a','b','d'], 2], [['a','b','c'], 1] ]
 ```
 
 ### getSubTrie(key, [shallow=false])
@@ -109,10 +113,6 @@ as a new trie.
 
     const removed = trie.remove(['a', 'b', 'c'])
     
-    // these are the same: 
-    console.log(removed.get(Trie.root)) // prints 'abc'
-    console.log(removed.get([])) // prints 'abc'
-
     console.log(removed.get([1])) // prints 'abc1'
     console.log(removed.get([2])) // prints 'abc2'
 
