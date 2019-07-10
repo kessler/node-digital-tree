@@ -229,7 +229,7 @@ test('trie search(prefix) include keys', t => {
 	const { subject } = t.context
 	createBigGraph(subject)
 	const results = Array.from(subject.search([1, 2, 3], { includeKeys: true }))
-	console.log(results)
+	
 	t.deepEqual(results, [
 		[
 			[1, 2, 3], 'foo'
