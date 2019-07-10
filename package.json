@@ -4,7 +4,7 @@
   "description": "trie data structure",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -R spec",
+    "test": "npx ava",
     "bench": "node benchmark.js"
   },
   "repository": {
