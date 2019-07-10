@@ -47,6 +47,16 @@ test('trie put() string)', t => {
 	t.is(subject.get(key.split('')), v1) // also an array with the same chars
 })
 
+test('trie put() object)', t => {
+	const { subject } = t.context
+
+	const key = [{ foo: 'bar' }, { bar: 'foo' }]
+	const v1 = 'foo'
+	subject.put(key, v1)
+
+	t.is(subject.get(key), v1) // works with string
+})
+
 test('trie keys can be longer than one character', t => {
 	const { subject } = t.context
 	const key = ['foo', 'bar', 'meow']
@@ -86,10 +96,22 @@ test('trie get() invalid key', t => {
 	}, 'invalid key')
 })
 
-test('trie getSubTrieView()', t => {
+test('trie getSubTrie()', t => {
 	const { subject } = t.context
 	createMediumGraph(subject)
-	const subTrie = subject.getSubTrieView([1, 2, 3])
+	const subTrie = subject.getSubTrie([1, 2, 3])
+
+	// [1,2,3,4] in original trie
+	t.is(subTrie.get([4]), 'zoo')
+
+	// [1,2,3,5] in original trie
+	t.is(subTrie.get([5]), 'goo')
+})
+
+test('trie getSubTrie() shallow === true', t => {
+	const { subject } = t.context
+	createMediumGraph(subject)
+	const subTrie = subject.getSubTrie([1, 2, 3], true)
 
 	// [1,2,3,4] in original trie
 	t.is(subTrie.get([4]), 'zoo')
@@ -201,6 +223,27 @@ test('trie search(prefix)', t => {
 	createBigGraph(subject)
 	const results = Array.from(subject.search([1, 2, 3]))
 	t.deepEqual(results, ['foo', 'goo', 'zoo', 'fee'])
+})
+
+test('trie search(prefix) include keys', t => {
+	const { subject } = t.context
+	createBigGraph(subject)
+	const results = Array.from(subject.search([1, 2, 3], { includeKeys: true }))
+	console.log(results)
+	t.deepEqual(results, [
+		[
+			[1, 2, 3], 'foo'
+		],
+		[
+			[1, 2, 3, 5], 'goo'
+		],
+		[
+			[1, 2, 3, 4], 'zoo'
+		],
+		[
+			[1, 2, 3, 4, 1], 'fee'
+		]
+	])
 })
 
 test('trie search(prefix) invalid key', t => {

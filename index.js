@@ -19,7 +19,8 @@ class Trie {
 	 *    @param  {variant} [options.rootValue]	The root value of the trie, normally you will not use this.
 	 *    @param  {Symbol} [options.iterationOrder=Trie.DFS] The trie is `iterable`, setting this will change the default iteration order.
 	 *    iteration order can be either `Trie.BFS` or `Trie.DFS`. You can still use an explicit iteration order by calling `trie.bfsIterator()` or `trie.dfsIterator()`
-	 *    @param  {HashMapNode} [options.NodeClass=HashMapNode] 123
+	 *    @param  {HashMapNode} [options.NodeClass=HashMapNode] 
+	 *    
 	 *    @return {Trie}
 	 */
 	static create({
@@ -79,6 +80,12 @@ class Trie {
 		current.value = value
 	}
 
+	putAll(iterable) {
+		for (let key of iterable) {
+			this.put(key, true)
+		}
+	}
+
 	/**
 	 *	get something from the tree.
 	 *
@@ -101,8 +108,8 @@ class Trie {
 	 *    
 	 *    @return {Trie} 
 	 */
-	getSubTrieView(key, shallow = false) {
-		debug('getSubTrieView( {%s} }', key)
+	getSubTrie(key, shallow = false) {
+		debug('getSubTrie( {%s} }', key)
 
 		const current = this._getNode(key)
 		return this._newTrieLikeThis(current, shallow)
@@ -141,11 +148,13 @@ class Trie {
 
 	/**
 	 *    search for all values that are associated with keys that have the specified prefix
-	 *    
+	 *    values will be ordered based on the default ordering of the trie (dfs/bfs)
+	 *     
 	 *    @param  {Iterable} prefix 
+	 *    @param  {boolean} [options.includeKeys=false] if set to true result will include keys as values.
 	 *    @return {Iterable}
 	 */
-	search(prefix) {
+	search(prefix, { includeKeys = false } = {}) {
 		if (!this._isValidKey(prefix)) {
 			throw new Error('invalid key')
 		}
@@ -156,19 +165,31 @@ class Trie {
 			return noopIterator
 		}
 
-		return this._newTrieIterator(this._iterationOrder, node)
+		return this._newTrieIterator(node, { includeKeys, iterationOrder: this._iterationOrder, prefix })
 	}
 
 	[Symbol.iterator]() {
-		return this._newTrieIterator(this._iterationOrder, this._root)
+		return this._newTrieIterator(this._root)
 	}
 
-	dfsIterator() {
-		return this._newTrieIterator(Trie.DFS, this._root)
+	/**
+	 *    return a DFS iterator for this trie
+	 *    
+	 *    @param  {boolean} [includeKeys=false] if set to true result will include keys as values.
+	 *    @return {Iterator}
+	 */
+	dfsIterator(includeKeys = false) {
+		return this._newTrieIterator(this._root, { includeKeys, iterationOrder: Trie.DFS })
 	}
 
-	bfsIterator() {
-		return this._newTrieIterator(Trie.BFS, this._root)
+	/**
+	 *    return a BFS iterator for this trie
+	 *    
+	 *    @param  {boolean} [includeKeys=false] if set to true result will include keys as values.
+	 *    @return {Iterator}
+	 */
+	bfsIterator(includeKeys = false) {
+		return this._newTrieIterator(this._root, { includeKeys, iterationOrder: Trie.BFS })
 	}
 
 	_getNode(key) {
@@ -178,7 +199,7 @@ class Trie {
 
 		let current = this._root
 		let count = 0
-
+		
 		for (let part of key) {
 			let node = current.getChild(part)
 			if (node === undefined) {
@@ -249,13 +270,13 @@ class Trie {
 		return trie
 	}
 
-	_newTrieIterator(iterationOrder, rootNode) {
+	_newTrieIterator(rootNode, { includeKeys = false, iterationOrder = this._iterationOrder, prefix } = {}) {
 		if (iterationOrder === _DFS) {
-			return new TrieIterator(rootNode, TrieIterator.StackWrapper)
+			return new TrieIterator(rootNode, { memory: TrieIterator.Stack, includeKeys, prefix })
 		}
 
 		if (iterationOrder === _BFS) {
-			return new TrieIterator(rootNode, TrieIterator.QueueWrapper)
+			return new TrieIterator(rootNode, { memory: TrieIterator.Queue, includeKeys, prefix })
 		}
 
 		throw new Error('invalid iteration order, try Trie.BFS or Trie.DFS')

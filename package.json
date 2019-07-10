@@ -4,7 +4,8 @@
   "description": "trie data structure",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -R spec"
+    "test": "mocha -R spec",
+    "bench": "node benchmark.js"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "ava": "^2.1.0",
-    "benchmarkify": "^2.1.1"
+    "benchmarkify": "^2.1.1",
+    "trie-d": "^1.0.6"
   }
 }
