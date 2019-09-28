@@ -63,7 +63,7 @@ A trie is iterable. Iteration order is either [DFS](https://en.wikipedia.org/wik
     trie.put('abd', 2)
     trie.put('abe', 3)
 
-    for (let [key, value] of trie) {
+    for (let value of trie) {
 
     }
 ```
