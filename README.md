@@ -86,7 +86,7 @@ The results will be an Iterator over the matching values. The order of iteration
 
 ### getSubTrie(key, [shallow=false])
 
-Obtain an either cloned or shallow copy of a subtree.
+Obtain either a cloned, or shallow copy of a subtree.
 
 ```javascript
 trie.put('abc', 1)
