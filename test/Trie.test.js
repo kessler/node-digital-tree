@@ -21,9 +21,11 @@ test('trie put throws an error if iterable has zero values', t => {
 	const { subject } = t.context
 	const iterable = new TestIterator(0)
 
-	t.throws(() => {
+	const error = t.throws(() => {
 		subject.put(iterable, 'foo')
-	}, 'invalid key')
+	})
+
+	t.is(error.message, 'invalid key')
 })
 
 test('trie put() same key, different value', t => {
@@ -67,9 +69,10 @@ test('trie keys can be longer than one character', t => {
 
 test('trie put() invalid key', t => {
 	const { subject } = t.context
-	t.throws(() => {
+	const error = t.throws(() => {
 		subject.put(1, 1)
-	}, 'invalid key')
+	})
+	t.is(error.message, 'invalid key')
 })
 
 test('trie get() a non existent key', t => {
@@ -81,19 +84,21 @@ test('trie get() a non existent key', t => {
 test('trie get() empty key', t => {
 	const { subject } = t.context
 
-	t.throws(() => {
+	const error = t.throws(() => {
 		// empty iterable
 		subject.get('')
-	}, 'invalid key')
+	})
+	t.is(error.message, 'invalid key')
 })
 
 test('trie get() invalid key', t => {
 	const { subject } = t.context
 
-	t.throws(() => {
+	const error = t.throws(() => {
 		// not iterable
 		subject.get(1)
-	}, 'invalid key')
+	})
+	t.is(error.message, 'invalid key')
 })
 
 test('trie getSubTrie()', t => {
@@ -145,17 +150,19 @@ test('trie remove() a non existent key', t => {
 test('trie remove() empty key', t => {
 	const { subject } = t.context
 
-	t.throws(() => {
+	const error = t.throws(() => {
 		subject.remove('')
-	}, 'invalid key')
+	})
+	t.is(error.message, 'invalid key')
 })
 
 test('trie remove() invalid key', t => {
 	const { subject } = t.context
 
-	t.throws(() => {
+	const error = t.throws(() => {
 		subject.remove(1)
-	}, 'invalid key')
+	})
+	t.is(error.message, 'invalid key')
 })
 
 test('iteration order is DFS by default', t => {
@@ -249,9 +256,10 @@ test('trie search(prefix) include keys', t => {
 test('trie search(prefix) invalid key', t => {
 	const { subject } = t.context
 
-	t.throws(() => {
+	const error = t.throws(() => {
 		subject.search(1)
-	}, 'invalid key')
+	})
+	t.is(error.message, 'invalid key')
 })
 
 test('trie search(prefix) non existent prefix', t => {
@@ -261,9 +269,10 @@ test('trie search(prefix) non existent prefix', t => {
 })
 
 test('trie create() with invalid iteration ordering', t => {
-	t.throws(() => {
+	const error = t.throws(() => {
 		Trie.create({ iterationOrder: 'bla' })
-	}, 'invalid iteration order, try Trie.BFS or Trie.DFS')
+	})
+	t.is(error.message, 'invalid iteration order, try Trie.BFS or Trie.DFS')
 })
 
 test.beforeEach(t => {
