@@ -27,7 +27,7 @@
     "json-stringify-safe": "^5.0.1"
   },
   "devDependencies": {
-    "ava": "^3.15.0",
+    "ava": "^5.2.0",
     "benchmarkify": "^2.1.1",
     "trie-d": "^1.0.6"
   }
